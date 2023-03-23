@@ -10,16 +10,50 @@ namespace LibraryAPI.Controllers
     public class LibraryAPIColtroller : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<LibraryDTO> GetLibraries()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<LibraryDTO>> GetLibraries()
         {
-            return LibraryStore.librarylist;
+            return Ok(LibraryStore.librarylist);
             
         }
 
         [HttpGet("id")]
-        public LibraryDTO GetLibrary(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<LibraryDTO> GetLibrary(int id)
         {
-            return LibraryStore.librarylist.FirstOrDefault(x => x.Id == id);
+            if(id == 0)
+            {
+                return BadRequest();
+            }
+            var library = LibraryStore.librarylist.FirstOrDefault(x => x.Id == id);
+            if(library == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(library);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<LibraryDTO> CreateLibrary([FromBody]LibraryDTO libraryDTO)
+        { 
+            if(libraryDTO == null)
+            {
+                return BadRequest(libraryDTO);
+            }
+            if(libraryDTO.Id > 0) 
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            libraryDTO.Id = LibraryStore.librarylist.OrderByDescending(x => x.Id).FirstOrDefault().Id+1;
+            LibraryStore.librarylist.Add(libraryDTO);
+
+            return Ok(libraryDTO);
         }
     }
 }
