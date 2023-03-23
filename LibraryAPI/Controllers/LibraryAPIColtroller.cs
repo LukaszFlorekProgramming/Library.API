@@ -18,7 +18,7 @@ namespace LibraryAPI.Controllers
 
         }
 
-        [HttpGet("id:int", Name = "GetLibrary")]
+        [HttpGet("{id:int}", Name = "GetLibrary")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -65,10 +65,9 @@ namespace LibraryAPI.Controllers
 
             return CreatedAtRoute("GetLibrary", new { id = libraryDTO.Id }, libraryDTO);
         }
-
+        [HttpDelete("{id:int}", Name = "DeleteLibrary")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpDelete("id:int", Name = "DeleteLibrary")]
         public IActionResult DeleteLibrary(int id)
         {
             if (id == 0)
@@ -84,11 +83,11 @@ namespace LibraryAPI.Controllers
 
             return NoContent();
         }
+        [HttpPut("{id:int}", Name = "UpdateLibrary")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpPut("id:int", Name = "UpdateLibrary")]
-        public IActionResult UpdateLibrary(int id, [FromBody] LibraryDTO libraryDTO)
+        
+        public IActionResult UpdateLibrary(int id, [FromBody]LibraryDTO libraryDTO)
         {
             if (libraryDTO == null || id != libraryDTO.Id)
             {
@@ -102,7 +101,7 @@ namespace LibraryAPI.Controllers
             return NoContent();
         }
 
-        [HttpPatch("id:int", Name = "UpdatePartialLibrary")]
+        [HttpPatch("{id:int}", Name = "UpdatePartialLibrary")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult UpdatePartialLibrary(int id, JsonPatchDocument<LibraryDTO> patchDTO)
@@ -114,7 +113,7 @@ namespace LibraryAPI.Controllers
             var library = LibraryStore.librarylist.FirstOrDefault(x => x.Id == id);
             if (library == null)
             {
-                return NotFound();
+                return BadRequest();
             }
             patchDTO.ApplyTo(library,ModelState);
             if(!ModelState.IsValid)
