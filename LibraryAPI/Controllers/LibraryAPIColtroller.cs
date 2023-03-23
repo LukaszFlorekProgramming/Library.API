@@ -10,18 +10,18 @@ namespace LibraryAPI.Controllers
     [ApiController]
     public class LibraryAPIColtroller : ControllerBase
     {
-        private readonly ILogger<LibraryAPIColtroller> logger;
-        public LibraryAPIColtroller(ILogger<LibraryAPIColtroller> _logger)
+        private readonly ILogger<LibraryAPIColtroller> _logger;
+        public LibraryAPIColtroller(ILogger<LibraryAPIColtroller> logger)
         {
-            logger = _logger;
+            _logger = logger;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<LibraryDTO>> GetLibraries()
         {
+            _logger.LogInformation("Getting all libraries");
             return Ok(LibraryStore.librarylist);
-
         }
 
         [HttpGet("{id:int}", Name = "GetLibrary")]
@@ -32,6 +32,7 @@ namespace LibraryAPI.Controllers
         {
             if (id == 0)
             {
+                _logger.LogInformation("Get Library Error with Id" + id);
                 return BadRequest();
             }
             var library = LibraryStore.librarylist.FirstOrDefault(x => x.Id == id);
