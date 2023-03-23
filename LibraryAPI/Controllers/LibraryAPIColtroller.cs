@@ -1,4 +1,5 @@
 ﻿using LibraryAPI.Models;
+using LibraryAPI.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers
@@ -8,12 +9,12 @@ namespace LibraryAPI.Controllers
     public class LibraryAPIColtroller : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<Library> GetLibraries()
+        public IEnumerable<LibraryDTO> GetLibraries()
         {
-            return new List<Library>
+            return new List<LibraryDTO>
             {
-                new Library{Id=1,Name="Czerwień Rubinu"},
-                new Library{Id=2,Name="Cień wiatru"}
+                new LibraryDTO{Id=1,Name="Czerwień Rubinu"},
+                new LibraryDTO{Id=2,Name="Cień wiatru"}
             };
         }
     }
