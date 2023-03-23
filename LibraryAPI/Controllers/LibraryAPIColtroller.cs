@@ -1,6 +1,7 @@
 ﻿using LibraryAPI.Data;
 using LibraryAPI.Models;
 using LibraryAPI.Models.Dto;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers
@@ -67,7 +68,6 @@ namespace LibraryAPI.Controllers
 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("id:int", Name = "DeleteLibrary")]
         public IActionResult DeleteLibrary(int id)
         {
@@ -99,6 +99,28 @@ namespace LibraryAPI.Controllers
             library.AuthorName = libraryDTO.AuthorName;
             library.yearOfPublication = libraryDTO.yearOfPublication;
 
+            return NoContent();
+        }
+
+        [HttpPatch("id:int", Name = "UpdatePartialLibrary")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdatePartialLibrary(int id, JsonPatchDocument<LibraryDTO> patchDTO)
+        {
+            if(patchDTO == null || id ==0)
+            {
+                return BadRequest();
+            }
+            var library = LibraryStore.librarylist.FirstOrDefault(x => x.Id == id);
+            if (library == null)
+            {
+                return NotFound();
+            }
+            patchDTO.ApplyTo(library,ModelState);
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             return NoContent();
         }
     }
