@@ -8,5 +8,9 @@ namespace LibraryAPI.Models.Dto
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
+        public string AuthorName { get; set; }
+        public int yearOfPublication { get; set; }
+
+
     }
 }
