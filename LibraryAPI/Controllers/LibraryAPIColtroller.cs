@@ -37,11 +37,20 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<LibraryDTO> CreateLibrary([FromBody]LibraryDTO libraryDTO)
         { 
+            /*if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }*/
+            if(LibraryStore.librarylist.FirstOrDefault(x =>x.Name.ToLower() == libraryDTO.Name.ToLower())!=null)
+            {
+                ModelState.AddModelError("CustomError", "Library already Exists!");
+                return BadRequest(ModelState);
+            }
             if(libraryDTO == null)
             {
                 return BadRequest(libraryDTO);
