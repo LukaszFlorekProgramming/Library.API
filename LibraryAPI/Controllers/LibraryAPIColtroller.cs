@@ -17,7 +17,7 @@ namespace LibraryAPI.Controllers
             
         }
 
-        [HttpGet("id")]
+        [HttpGet("id:int",Name = "GetLibrary")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -53,7 +53,7 @@ namespace LibraryAPI.Controllers
             libraryDTO.Id = LibraryStore.librarylist.OrderByDescending(x => x.Id).FirstOrDefault().Id+1;
             LibraryStore.librarylist.Add(libraryDTO);
 
-            return Ok(libraryDTO);
+            return CreatedAtRoute("GetLibrary",new {id = libraryDTO.Id}, libraryDTO);
         }
     }
 }
