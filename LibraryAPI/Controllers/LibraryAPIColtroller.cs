@@ -1,4 +1,5 @@
-﻿using LibraryAPI.Models;
+﻿using LibraryAPI.Data;
+using LibraryAPI.Models;
 using LibraryAPI.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +12,8 @@ namespace LibraryAPI.Controllers
         [HttpGet]
         public IEnumerable<LibraryDTO> GetLibraries()
         {
-            return new List<LibraryDTO>
-            {
-                new LibraryDTO{Id=1,Name="Czerwień Rubinu"},
-                new LibraryDTO{Id=2,Name="Cień wiatru"}
-            };
+            return LibraryStore.librarylist;
+            
         }
     }
 }
