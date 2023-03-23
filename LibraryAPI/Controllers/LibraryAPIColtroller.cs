@@ -64,5 +64,26 @@ namespace LibraryAPI.Controllers
 
             return CreatedAtRoute("GetLibrary",new {id = libraryDTO.Id}, libraryDTO);
         }
+
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpDelete("id:int", Name = "DeleteLibrary")]
+        public IActionResult DeleteLibrary(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            var library = LibraryStore.librarylist.FirstOrDefault(x => x.Id == id);
+            if (library == null)
+            {
+                return NotFound();
+            }
+            LibraryStore.librarylist.Remove(library);
+
+            return NoContent();
+        }
+
     }
 }
