@@ -10,6 +10,12 @@ namespace LibraryAPI.Controllers
     [ApiController]
     public class LibraryAPIColtroller : ControllerBase
     {
+        private readonly ILogger<LibraryAPIColtroller> logger;
+        public LibraryAPIColtroller(ILogger<LibraryAPIColtroller> _logger)
+        {
+            logger = _logger;
+        }
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<LibraryDTO>> GetLibraries()
