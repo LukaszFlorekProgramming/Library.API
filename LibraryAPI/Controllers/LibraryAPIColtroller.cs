@@ -15,5 +15,11 @@ namespace LibraryAPI.Controllers
             return LibraryStore.librarylist;
             
         }
+
+        [HttpGet("id")]
+        public LibraryDTO GetLibrary(int id)
+        {
+            return LibraryStore.librarylist.FirstOrDefault(x => x.Id == id);
+        }
     }
 }
