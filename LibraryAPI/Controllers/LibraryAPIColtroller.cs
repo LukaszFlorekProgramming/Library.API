@@ -15,13 +15,18 @@ namespace LibraryAPI.Controllers
         {
             _logger = logger;
         }*/
+        private readonly ApplicationDbContext _db;
+        public LibraryAPIColtroller(ApplicationDbContext db)
+        {
+            _db=db;
+        }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<LibraryDTO>> GetLibraries()
         {
             //_logger.LogInformation("Getting all libraries");
-            return Ok(LibraryStore.librarylist);
+            return Ok(_db.Libraries.ToList());
         }
 
         [HttpGet("{id:int}", Name = "GetLibrary")]
@@ -35,7 +40,7 @@ namespace LibraryAPI.Controllers
                 //_logger.LogInformation("Get Library Error with Id" + id);
                 return BadRequest();
             }
-            var library = LibraryStore.librarylist.FirstOrDefault(x => x.Id == id);
+            var library = _db.Libraries.FirstOrDefault(x => x.Id == id);
             if (library == null)
             {
                 return NotFound();
@@ -54,7 +59,7 @@ namespace LibraryAPI.Controllers
             {
                 return BadRequest(ModelState);
             }*/
-            if (LibraryStore.librarylist.FirstOrDefault(x => x.Name.ToLower() == libraryDTO.Name.ToLower())!=null)
+            if (_db.Libraries.FirstOrDefault(x => x.Name.ToLower() == libraryDTO.Name.ToLower())!=null)
             {
                 ModelState.AddModelError("CustomError", "Library already Exists!");
                 return BadRequest(ModelState);
@@ -65,10 +70,19 @@ namespace LibraryAPI.Controllers
             }
             if (libraryDTO.Id > 0)
             {
-                return StatusCode(StatusCodes.Status400BadRequest);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            libraryDTO.Id = LibraryStore.librarylist.OrderByDescending(x => x.Id).FirstOrDefault().Id+1;
-            LibraryStore.librarylist.Add(libraryDTO);
+            Library model = new()
+            {
+                Id = libraryDTO.Id,
+                Name = libraryDTO.Name,
+                Description = libraryDTO.Description,
+                Price = libraryDTO.Price,
+                AuthorName = libraryDTO.AuthorName,
+                yearOfPublication = libraryDTO.yearOfPublication
+            };
+            _db.Libraries.Add(model);
+            _db.SaveChanges();
 
             return CreatedAtRoute("GetLibrary", new { id = libraryDTO.Id }, libraryDTO);
         }
@@ -81,12 +95,13 @@ namespace LibraryAPI.Controllers
             {
                 return BadRequest();
             }
-            var library = LibraryStore.librarylist.FirstOrDefault(x => x.Id == id);
+            var library = _db.Libraries.FirstOrDefault(x => x.Id == id);
             if (library == null)
             {
                 return NotFound();
             }
-            LibraryStore.librarylist.Remove(library);
+            _db.Libraries.Remove(library);
+            _db.SaveChanges();
 
             return NoContent();
         }
@@ -100,11 +115,22 @@ namespace LibraryAPI.Controllers
             {
                 return BadRequest();
             }
-            var library = LibraryStore.librarylist.FirstOrDefault(x => x.Id == id);
+            /*var library = LibraryStore.librarylist.FirstOrDefault(x => x.Id == id);
             library.Name = libraryDTO.Name;
             library.AuthorName = libraryDTO.AuthorName;
-            library.yearOfPublication = libraryDTO.yearOfPublication;
+            library.yearOfPublication = libraryDTO.yearOfPublication;*/
 
+            Library model = new()
+            {
+                Id = libraryDTO.Id,
+                Name = libraryDTO.Name,
+                Description = libraryDTO.Description,
+                Price = libraryDTO.Price,
+                AuthorName = libraryDTO.AuthorName,
+                yearOfPublication = libraryDTO.yearOfPublication
+            };
+            _db.Libraries.Update(model);
+            _db.SaveChanges();
             return NoContent();
         }
 
@@ -117,13 +143,37 @@ namespace LibraryAPI.Controllers
             {
                 return BadRequest();
             }
-            var library = LibraryStore.librarylist.FirstOrDefault(x => x.Id == id);
+            var library = _db.Libraries.FirstOrDefault(x => x.Id == id);
+
+            LibraryDTO libraryDTO = new()
+            {
+                Id = library.Id,
+                Name = library.Name,
+                Description = library.Description,
+                Price = library.Price,
+                AuthorName = library.AuthorName,
+                yearOfPublication = library.yearOfPublication
+            };
+
             if (library == null)
             {
                 return BadRequest();
             }
-            patchDTO.ApplyTo(library,ModelState);
-            if(!ModelState.IsValid)
+            patchDTO.ApplyTo(libraryDTO, ModelState);
+
+            Library model = new()
+            {
+                Id = libraryDTO.Id,
+                Name = libraryDTO.Name,
+                Description = libraryDTO.Description,
+                Price = libraryDTO.Price,
+                AuthorName = libraryDTO.AuthorName,
+                yearOfPublication = libraryDTO.yearOfPublication
+            };
+            _db.Libraries.Update(model);
+            _db.SaveChanges();
+
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
