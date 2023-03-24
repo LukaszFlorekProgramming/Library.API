@@ -3,6 +3,7 @@ using LibraryAPI.Models;
 using LibraryAPI.Models.Dto;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI.Controllers
 {
@@ -143,7 +144,8 @@ namespace LibraryAPI.Controllers
             {
                 return BadRequest();
             }
-            var library = _db.Libraries.FirstOrDefault(x => x.Id == id);
+            var library = _db.Libraries.AsNoTracking().FirstOrDefault(x => x.Id == id);
+
 
             LibraryDTO libraryDTO = new()
             {
