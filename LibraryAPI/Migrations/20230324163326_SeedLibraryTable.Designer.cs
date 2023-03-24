@@ -4,6 +4,7 @@ using LibraryAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230324163326_SeedLibraryTable")]
+    partial class SeedLibraryTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,7 +66,7 @@ namespace LibraryAPI.Migrations
                         {
                             Id = 1,
                             AuthorName = "Czesław Bogucin",
-                            CreatedDate = new DateTime(2023, 3, 24, 17, 35, 12, 589, DateTimeKind.Local).AddTicks(2847),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Książka o czarach",
                             Name = "Czerwień Rubinu",
                             Price = 62.0,
@@ -74,7 +77,7 @@ namespace LibraryAPI.Migrations
                         {
                             Id = 2,
                             AuthorName = "C.S Lewis",
-                            CreatedDate = new DateTime(2023, 3, 24, 17, 35, 12, 589, DateTimeKind.Local).AddTicks(2887),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Przygoda",
                             Name = "Opowieści z Narnii",
                             Price = 50.0,
@@ -85,7 +88,7 @@ namespace LibraryAPI.Migrations
                         {
                             Id = 3,
                             AuthorName = "J.K Rowling",
-                            CreatedDate = new DateTime(2023, 3, 24, 17, 35, 12, 589, DateTimeKind.Local).AddTicks(2889),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Książka o czarach",
                             Name = "Harry Potter",
                             Price = 12.0,
@@ -96,7 +99,7 @@ namespace LibraryAPI.Migrations
                         {
                             Id = 4,
                             AuthorName = "Stanisław Lem",
-                            CreatedDate = new DateTime(2023, 3, 24, 17, 35, 12, 589, DateTimeKind.Local).AddTicks(2891),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Literatura piękna",
                             Name = "Solaris",
                             Price = 99.0,
@@ -107,7 +110,7 @@ namespace LibraryAPI.Migrations
                         {
                             Id = 5,
                             AuthorName = "George  R.R. Martin",
-                            CreatedDate = new DateTime(2023, 3, 24, 17, 35, 12, 589, DateTimeKind.Local).AddTicks(2893),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Walka o władze",
                             Name = "Gra o Tron",
                             Price = 2.0,
