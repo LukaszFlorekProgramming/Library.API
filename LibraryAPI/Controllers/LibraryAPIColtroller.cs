@@ -161,6 +161,10 @@ namespace LibraryAPI.Controllers
             {
                 return BadRequest();
             }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             patchDTO.ApplyTo(libraryDTO, ModelState);
 
             Library model = new()
@@ -175,10 +179,6 @@ namespace LibraryAPI.Controllers
             _db.Libraries.Update(model);
             _db.SaveChanges();
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             return NoContent();
         }
     }
